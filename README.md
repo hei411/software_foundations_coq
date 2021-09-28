@@ -1,1 +1,1 @@
-# sofware_foundations_coq
+Software Foundations Coq

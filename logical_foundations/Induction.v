@@ -152,43 +152,79 @@ Fixpoint normalize (b:bin) : bin :=
            end
   |B1 k=> B1 (normalize k)
   end.
-
-Lemma lemma0: forall n', match normalize n' with
-| Z => Z
-| B0 n => B0 (B0 n)
-| B1 n => B0 (B1 n)
-end = normalize match normalize n' with
-                | Z => Z
-                | B0 n => B0 (B0 n)
-                | B1 n => B0 (B1 n)
-                end.
+Lemma incr_B1_reverse: forall n, B1 (incr n) = incr (incr (incr (B0 n))).
 Proof.
-intros n'.
-induction n'.
+intros n.
+induction n.
+simpl. reflexivity.
+simpl. reflexivity.
 reflexivity.
-simpl. Admitted.
-
-Lemma lemma1:forall n, nat_to_bin (n + n) = normalize (B0 (nat_to_bin n)).
+Qed.
+Lemma incr_B0_reverse: forall n, B0 (incr n) = incr (incr (B0 n)).
+Proof. 
+induction n.
+reflexivity.
+reflexivity.
+reflexivity.
+Qed.
+Lemma lemma0: forall n m, nat_to_bin (n + S m) = incr (nat_to_bin(n+m)).
+intros n m.
+induction n.
+induction m.
+reflexivity.
+rewrite IHm.
+simpl. reflexivity.
+simpl. rewrite IHn. reflexivity.
+Qed.
+Lemma lemma0': forall n, B0 (incr (nat_to_bin n)) = incr(incr(nat_to_bin (n + n))).
+Proof. 
+intros n.
+induction n.
+reflexivity.
+simpl. rewrite lemma0. rewrite <- IHn. rewrite incr_B0_reverse. reflexivity.
+Qed.
+Lemma lemma1: forall n, nat_to_bin (S n + S n) = B0 (nat_to_bin (S n)).
 intros n.
 induction n as [|n' IHn'].
 reflexivity.
-simpl. 
-Admitted.
-Lemma lemma2: forall n, normalize n = normalize (normalize n).
+simpl. rewrite lemma0, lemma0. rewrite incr_B0_reverse. rewrite lemma0'. reflexivity.
+Qed. 
+
+Lemma lemma2: forall n, nat_to_bin (S n + S n) = B0 ( incr (nat_to_bin n)).
+Proof.
 intros n.
-induction n as [|n' IHn'|n'' IHn''].
+induction n.
 reflexivity.
-simpl. 
-Admitted.
-Lemma lemma3:forall n, incr(nat_to_bin (n + n)) = normalize (B1 (nat_to_bin n)).
-Admitted.
+simpl. rewrite lemma0, lemma0. rewrite incr_B0_reverse. rewrite <- IHn. rewrite lemma0. 
+assert (H:S n + n = n+ S n).
+rewrite add_comm.
+reflexivity.
+rewrite H.
+rewrite lemma0. reflexivity.
+Qed. 
+
 Theorem bin_nat_bin :forall n, nat_to_bin( bin_to_nat n) = normalize n.
 Proof.
 intros n.
-  induction n .
- reflexivity.
- simpl.  rewrite lemma1. rewrite IHn. simpl.  rewrite <-lemma2. reflexivity.
- simpl. rewrite lemma3. rewrite IHn.  simpl. rewrite <- lemma2. reflexivity.
- Qed.
+  induction n as [|n' IHn'| n'' IHn''].
+  reflexivity.
+  simpl. rewrite <- IHn'.
+  destruct (bin_to_nat n') eqn: E_n'.
+  reflexivity. 
+  rewrite lemma1. simpl.
+  destruct (nat_to_bin n).
+  simpl. reflexivity.
+  reflexivity.
+  reflexivity.
+  simpl.
+  rewrite <- IHn''. 
+  destruct (bin_to_nat n'') eqn:H.
+  reflexivity. rewrite lemma2.
+  simpl. reflexivity.
+  Qed.
+  
+  
+  
+  
  
  

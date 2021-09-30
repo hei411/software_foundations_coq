@@ -150,6 +150,7 @@ Module NatPlayground.
 Inductive nat : Type :=
   | O
   | S (n : nat).
+
 Inductive nat' : Type :=
   | stop
   | tick (foo : nat').

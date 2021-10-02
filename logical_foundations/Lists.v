@@ -355,7 +355,7 @@ simpl. rewrite n_eq. reflexivity.
 Qed.
 
 Module PartialMap.
-
+Export NatList.
 Inductive partial_map : Type :=
   | empty
   | record (i : id) (v : nat) (m : partial_map).
@@ -393,3 +393,4 @@ Proof.
   simpl. rewrite H. reflexivity.
   simpl. rewrite H. reflexivity.
   Qed.
+End PartialMap.

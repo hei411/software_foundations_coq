@@ -83,6 +83,7 @@ Proof.
 Qed.
 
 Module OptionPlayground.
+End OptionPlayground.
 Inductive option (X:Type) : Type :=
   | Some (x : X)
   | None.
@@ -97,7 +98,7 @@ Fixpoint nth_error {X : Type} (l : list X) (n : nat)
                | S n' => nth_error l' n'
                end
   end.
-End OptionPlayground.
+
 
 Definition doit3times {X : Type} (f : X->X) (n : X) : X :=
   f (f (f n)).

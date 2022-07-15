@@ -20,3 +20,8 @@
 *.vo
 *.vok
 *.vos
+
+
+*.html
+*.svg
+plf/common/
